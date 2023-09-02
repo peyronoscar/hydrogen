@@ -18,6 +18,7 @@ import type {
   LanguageCode,
   CountryCode,
 } from '@shopify/hydrogen/storefront-api-types';
+import {Locale, countries} from '~/data';
 
 /**
  * Export a fetch handler in module format.
@@ -256,27 +257,18 @@ const CART_QUERY_FRAGMENT = `#graphql
   }
 ` as const;
 
-export type I18nLocale = {
-  language: LanguageCode;
-  country: CountryCode;
-  pathPrefix: string;
-};
-
-function getLocaleFromRequest(request: Request): I18nLocale {
+function getLocaleFromRequest(request: Request): Locale {
   const url = new URL(request.url);
-  const firstPathPart = url.pathname.split('/')[1]?.toUpperCase() ?? '';
+  const firstPathPart = url.pathname.split('/')[1] ?? '';
 
-  let pathPrefix = '';
-  let language: LanguageCode = 'EN';
-  let country: CountryCode = 'US';
+  let locale = countries['en-us'];
 
-  if (/^[A-Z]{2}-[A-Z]{2}$/i.test(firstPathPart)) {
-    pathPrefix = '/' + firstPathPart;
-    [language, country] = firstPathPart.split('-') as [
-      LanguageCode,
-      CountryCode,
-    ];
+  if (
+    /^[A-Z]{2}-[A-Z]{2}$/i.test(firstPathPart) &&
+    firstPathPart in countries
+  ) {
+    locale = countries[firstPathPart];
   }
 
-  return {language, country, pathPrefix};
+  return {...locale};
 }

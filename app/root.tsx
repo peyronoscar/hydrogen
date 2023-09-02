@@ -94,6 +94,7 @@ export async function loader({context}: LoaderArgs) {
       header: await headerPromise,
       isLoggedIn,
       publicStoreDomain,
+      selectedLocale: storefront.i18n,
     },
     {headers},
   );
@@ -104,7 +105,7 @@ export default function App() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <html lang="en">
+    <html lang={data.selectedLocale.language}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -112,7 +113,10 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Layout {...data}>
+        <Layout
+          {...data}
+          key={data.selectedLocale.language + data.selectedLocale.country}
+        >
           <Outlet />
         </Layout>
         <ScrollRestoration nonce={nonce} />

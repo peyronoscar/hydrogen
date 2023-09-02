@@ -13,6 +13,7 @@ import {
   PredictiveSearchForm,
   PredictiveSearchResults,
 } from '~/components/Search';
+import {CountrySelector} from './CountrySelector';
 
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -31,6 +32,7 @@ export function Layout({
 }: LayoutProps) {
   return (
     <>
+      <CountrySelector />
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside menu={header.menu} />

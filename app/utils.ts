@@ -1,5 +1,9 @@
-import {useLocation} from '@remix-run/react';
-import type {SelectedOption} from '@shopify/hydrogen/storefront-api-types';
+import {useLocation, useMatches} from '@remix-run/react';
+import type {
+  CountryCode,
+  LanguageCode,
+  SelectedOption,
+} from '@shopify/hydrogen/storefront-api-types';
 import {useMemo} from 'react';
 
 export function useVariantUrl(
@@ -43,4 +47,11 @@ export function getVariantUrl({
   const searchString = searchParams.toString();
 
   return path + (searchString ? '?' + searchParams.toString() : '');
+}
+
+export function getPathPrefix(
+  language: LanguageCode,
+  country: CountryCode,
+): string {
+  return `${language}-${country}`.toLowerCase();
 }
